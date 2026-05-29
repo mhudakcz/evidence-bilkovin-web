@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#f88379">
+<title>Evidence bílkovin</title>
+<script>
+  // Aplikuj uložené téma a režim co nejdřív, ať to neblikne při načítání
+  (function() {
+    try {
+      const t = localStorage.getItem("evidence-bilkovin:theme") || "losos";
+      const m = localStorage.getItem("evidence-bilkovin:mode") || "light";
+      document.documentElement.setAttribute("data-theme", t);
+      document.documentElement.setAttribute("data-mode", m);
+    } catch {
+      document.documentElement.setAttribute("data-theme", "losos");
+      document.documentElement.setAttribute("data-mode", "light");
+    }
+  })();
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* ============ TÉMA: Losos · Light (default) ============ */
+  :root, [data-theme="losos"][data-mode="light"] {
+    --primary: #f88379;
+    --primary-dark: #e56b6f;
+    --primary-light: #ffd6d2;
+    --primary-rgb: 248, 131, 121;
+    --accent: #fdba74;
+    --surface: #ffffff;
+    --surface-tint: #fff3f1;
+    --bg: #ffe1de;
+    --border: #ffd6d2;
+    --text: #4a2630;
+    --text-muted: #a07682;
+    --danger: #ef4444;
+    --success: #22c55e;
+    --body-bg:
+      radial-gradient(circle at 20% 10%, #ffd6d2 0%, transparent 45%),
+      radial-gradient(circle at 80% 30%, #ffe1de 0%, transparent 50%),
+      radial-gradient(circle at 50% 80%, #ffdde0 0%, transparent 55%),
+      linear-gradient(135deg, #fff3f1 0%, #ffe1de 50%, #ffece8 100%);
+    --total-gradient: linear-gradient(135deg, #ffb3a8 0%, #f88379 55%, #e56b6f 100%);
+    --bar-light: #ffc8c2;
+    --emoji-opacity: 0.13;
+    --sparkle-opacity: 0.4;
+  }
+
+  /* ============ TÉMA: Losos · Dark ============ */
+  [data-theme="losos"][data-mode="dark"] {
+    --primary: #f88379;
+    --primary-dark: #c2554f;
+    --primary-light: #5c2a30;
+    --primary-rgb: 248, 131, 121;
+    --surface: #2a1d20;
+    --surface-tint: #221619;
+    --bg: #3a262b;
+    --border: #4a3036;
+    --text: #fce8e3;
+    --text-muted: #c8a8a8;
+    --body-bg:
+      radial-gradient(circle at 20% 10%, #3a1f26 0%, transparent 45%),
+      radial-gradient(circle at 80% 30%, #2a161c 0%, transparent 50%),
+      radial-gradient(circle at 50% 80%, #321a22 0%, transparent 55%),
+      linear-gradient(135deg, #1d1216 0%, #261519 50%, #1f1317 100%);
+    --total-gradient: linear-gradient(135deg, #ffb3a8 0%, #f88379 55%, #c2554f 100%);
+    --bar-light: #ffc8c2;
+    --emoji-opacity: 0.08;
+    --sparkle-opacity: 0.35;
+  }
+
+  /* ============ TÉMA: Cappuccino · Light ============ */
+  [data-theme="cappuccino"][data-mode="light"] {
+    --primary: #c19a6b;
+    --primary-dark: #8b6f47;
+    --primary-light: #f0e1cc;
+    --primary-rgb: 193, 154, 107;
+    --accent: #d4a574;
+    --surface: #ffffff;
+    --surface-tint: #fdf6ec;
+    --bg: #f5e6cd;
+    --border: #e8d4b8;
+    --text: #3a2618;
+    --text-muted: #8a7060;
+    --body-bg:
+      radial-gradient(circle at 20% 10%, #f0e1cc 0%, transparent 45%),
+      radial-gradient(circle at 80% 30%, #f5e6cd 0%, transparent 50%),
+      radial-gradient(circle at 50% 80%, #ede0c5 0%, transparent 55%),
+      linear-gradient(135deg, #faf2e3 0%, #f5e6cd 50%, #faebda 100%);
+    --total-gradient: linear-gradient(135deg, #d4a574 0%, #c19a6b 55%, #8b6f47 100%);
+    --bar-light: #e8c89a;
+    --emoji-opacity: 0.13;
+    --sparkle-opacity: 0.4;
+  }
+
+  /* ============ TÉMA: Cappuccino · Dark ============ */
+  [data-theme="cappuccino"][data-mode="dark"] {
+    --primary: #d4a574;
+    --primary-dark: #8b6f47;
+    --primary-light: #4a3528;
+    --primary-rgb: 212, 165, 116;
+    --accent: #e8c089;
+    --surface: #2d2018;
+    --surface-tint: #221710;
+    --bg: #3a2a20;
+    --border: #4a3a2e;
+    --text: #f0e1cc;
+    --text-muted: #b8a08a;
+    --body-bg:
+      radial-gradient(circle at 20% 10%, #2e1f15 0%, transparent 45%),
+      radial-gradient(circle at 80% 30%, #261810 0%, transparent 50%),
+      radial-gradient(circle at 50% 80%, #2a1d12 0%, transparent 55%),
+      linear-gradient(135deg, #1d130c 0%, #251a12 50%, #1f140d 100%);
+    --total-gradient: linear-gradient(135deg, #e8c089 0%, #d4a574 55%, #8b6f47 100%);
+    --bar-light: #f0e1cc;
+    --emoji-opacity: 0.08;
+    --sparkle-opacity: 0.35;
+  }
+  html, body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    padding: 0 0 100px 0;
+    background: var(--body-bg);
+    background-attachment: fixed;
+    position: relative;
+    overflow-x: hidden;
+    transition: background 0.3s ease;
+  }
+
+  /* Dekorativní pozadí s emoji */
+  .bg-decoration {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .bg-decoration span {
+    position: absolute;
+    font-size: 2.8rem;
+    opacity: var(--emoji-opacity, 0.13);
+    transform: rotate(var(--r, 0deg));
+    user-select: none;
+    animation: float 8s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+    transition: opacity 0.3s ease;
+  }
+  .bg-decoration .sparkle {
+    font-size: 1.4rem;
+    opacity: var(--sparkle-opacity, 0.4);
+  }
+  @keyframes float {
+    0%, 100% { transform: rotate(var(--r, 0deg)) translateY(0); }
+    50% { transform: rotate(var(--r, 0deg)) translateY(-8px); }
+  }
+  #login-screen, #main-screen, #loading-screen, header, .total-card, main, .fab {
+    position: relative;
+    z-index: 1;
+  }
+  header { z-index: 5; }
+  .fab { z-index: 6; }
+  button {
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: inherit;
+  }
+  input, select {
+    font-family: inherit;
+    font-size: 1rem;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text);
+  }
+  input:focus, select:focus { outline: 2px solid var(--primary); outline-offset: -1px; }
+
+  /* Login screen */
+  #login-screen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+  }
+  #login-screen h1 { font-size: 2rem; margin-bottom: 8px; }
+  #login-screen p { color: var(--text-muted); margin-bottom: 32px; }
+  .login-icon {
+    font-size: 5rem;
+    margin-bottom: 16px;
+    animation: bounce 3s ease-in-out infinite;
+    filter: drop-shadow(0 4px 12px rgba(var(--primary-rgb), 0.3));
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: background 0.15s;
+  }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-primary:disabled { background: #d6d3d1; cursor: not-allowed; }
+
+  /* Header */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .user-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    gap: 8px;
+  }
+  .user-bar > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+    flex: 1;
+  }
+  .user-bar button {
+    color: var(--primary);
+    font-size: 0.85rem;
+  }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .header-icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: var(--bg);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    line-height: 1;
+    padding: 0;
+  }
+  .header-icon-btn:hover {
+    background: var(--primary-light);
+    transform: scale(1.06);
+  }
+  .header-icon-btn:active {
+    transform: scale(0.95);
+  }
+  .date-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .nav-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--bg);
+    font-size: 1.4rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .nav-btn:hover { background: var(--border); }
+  .date-display {
+    text-align: center;
+    flex: 1;
+  }
+  .date-day { font-size: 1.1rem; font-weight: 600; }
+  .date-full { font-size: 0.8rem; color: var(--text-muted); }
+  #today-btn {
+    margin-top: 4px;
+    font-size: 0.75rem;
+    color: var(--primary);
+    text-decoration: underline;
+  }
+
+  /* Total */
+  .total-card {
+    margin: 16px;
+    padding: 24px 20px;
+    background: var(--total-gradient);
+    color: white;
+    border-radius: 22px;
+    text-align: center;
+    box-shadow: 0 10px 28px rgba(var(--primary-rgb), 0.28);
+    overflow: hidden;
+  }
+  .total-card::before {
+    content: "💪";
+    position: absolute;
+    font-size: 6rem;
+    opacity: 0.14;
+    right: -14px;
+    top: -8px;
+    transform: rotate(18deg);
+    pointer-events: none;
+  }
+  .total-card::after {
+    content: "✨";
+    position: absolute;
+    left: 14px;
+    bottom: 10px;
+    font-size: 1.3rem;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  .total-card > * { position: relative; z-index: 1; }
+  .total-card::before, .total-card::after { z-index: 0; }
+  .total-label { font-size: 0.85rem; opacity: 0.95; letter-spacing: 0.5px; }
+  .total-value { font-size: 2.75rem; font-weight: 700; line-height: 1.1; margin-top: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.08); }
+  .total-unit { font-size: 1rem; opacity: 0.95; }
+
+  /* Entries list */
+  main { padding: 0 16px; }
+  #entries-list { list-style: none; }
+  .entry {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.06);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .entry:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(var(--primary-rgb), 0.12);
+  }
+  .entry-info { flex: 1; min-width: 0; }
+  .entry-name {
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .entry-protein {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .entry-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+  .icon-btn:hover { background: var(--border); }
+  .icon-btn.danger:hover { background: #fee2e2; color: var(--danger); }
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .empty-icon {
+    font-size: 4rem;
+    margin-bottom: 12px;
+    display: inline-block;
+    animation: bounce 3s ease-in-out infinite;
+  }
+  .empty-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .empty-text {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* Add button (FAB) */
+  .fab {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 1rem;
+    box-shadow: 0 8px 20px rgba(var(--primary-rgb), 0.4);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 5;
+  }
+  .fab:hover { background: var(--primary-dark); }
+  .fab-icon { font-size: 1.3rem; line-height: 1; }
+
+  /* View tabs (Záznamy / Statistiky) */
+  .view-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+    background: var(--bg);
+    padding: 4px;
+    border-radius: 12px;
+  }
+  .view-tab {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .view-tab.active {
+    background: white;
+    color: var(--primary);
+    box-shadow: 0 2px 6px rgba(var(--primary-rgb), 0.15);
+  }
+
+  /* Period tabs (Den / Týden / Měsíc) */
+  .period-tabs {
+    display: flex;
+    gap: 6px;
+    margin: 16px;
+    background: var(--surface);
+    padding: 4px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .period-tab {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .period-tab.active {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.3);
+  }
+
+  /* Stats summary cards */
+  .stats-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 0 16px 16px;
+  }
+  .stat-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 8px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.05);
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .stat-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .stat-unit {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* Chart */
+  .chart-card {
+    margin: 0 16px;
+    padding: 20px 16px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(var(--primary-rgb), 0.06);
+  }
+  .chart-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 200px;
+    padding-bottom: 24px;
+    position: relative;
+  }
+  .chart-empty {
+    width: 100%;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    align-self: center;
+    padding: 40px 0;
+  }
+  .bar {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    position: relative;
+    cursor: default;
+  }
+  .bar-value {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-bottom: 3px;
+    font-weight: 600;
+    min-height: 0.8rem;
+  }
+  .bar-fill {
+    width: 100%;
+    background: linear-gradient(180deg, var(--bar-light) 0%, var(--primary) 50%, var(--primary-dark) 100%);
+    border-radius: 6px 6px 0 0;
+    height: var(--h, 0%);
+    min-height: 2px;
+    transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+  .bar-fill.zero {
+    background: var(--border);
+    min-height: 4px;
+  }
+  .bar-label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    position: absolute;
+    bottom: -20px;
+    white-space: nowrap;
+    transform: rotate(-45deg);
+    transform-origin: center;
+  }
+  .bar:hover .bar-fill {
+    filter: brightness(1.1);
+  }
+
+  /* Modal */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 100;
+    animation: fadeIn 0.2s;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal {
+    background: var(--surface);
+    width: 100%;
+    max-width: 500px;
+    border-radius: 20px 20px 0 0;
+    padding: 24px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.25s ease-out;
+  }
+  @media (min-width: 600px) {
+    .modal-backdrop { align-items: center; }
+    .modal { border-radius: 20px; }
+  }
+  .modal h2 { margin-bottom: 16px; font-size: 1.25rem; }
+  .form-group { margin-bottom: 14px; }
+  .form-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .qty-unit-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+  .qty-control {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .qty-btn {
+    width: 52px;
+    background: var(--primary-light);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    transition: all 0.15s;
+    line-height: 1;
+  }
+  .qty-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+  .qty-btn:active {
+    transform: scale(0.95);
+  }
+  #food-qty {
+    text-align: center;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* Autocomplete potravin */
+  .autocomplete {
+    position: relative;
+  }
+  .suggestions {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    max-height: 280px;
+    overflow-y: auto;
+    z-index: 110;
+    box-shadow: 0 8px 24px rgba(var(--primary-rgb), 0.2);
+  }
+  .suggestion {
+    padding: 10px 14px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--surface-tint);
+    transition: background 0.1s;
+  }
+  .suggestion:last-child { border-bottom: none; }
+  .suggestion:hover, .suggestion.active {
+    background: var(--primary-light);
+  }
+  .suggestion-name {
+    font-size: 0.95rem;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .suggestion-meta {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 1px;
+  }
+  .suggestion-custom {
+    font-weight: 600;
+    color: var(--primary-dark);
+    background: var(--surface-tint);
+    position: sticky;
+    bottom: 0;
+  }
+  .suggestion-empty {
+    padding: 14px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+  mark.match {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    padding: 0 2px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .modal-actions button {
+    flex: 1;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .btn-secondary {
+    background: var(--bg);
+    color: var(--text);
+  }
+  .btn-secondary:hover { background: var(--border); }
+
+  /* Loading */
+  .loader {
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+  }
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1c1917;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    z-index: 200;
+    animation: slideUp 0.2s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- DECORATIVE BACKGROUND -->
+<div class="bg-decoration" aria-hidden="true">
+  <span style="top:4%;left:6%;--r:-15deg;--d:0s">🥚</span>
+  <span style="top:9%;left:78%;--r:22deg;--d:.6s">🍳</span>
+  <span style="top:14%;left:42%;--r:30deg;--d:1.4s">🥜</span>
+  <span style="top:18%;left:24%;--r:-22deg;--d:2.4s">🥯</span>
+  <span style="top:22%;left:88%;--r:-8deg;--d:.3s">🍇</span>
+  <span style="top:28%;left:10%;--r:18deg;--d:1.8s">🧀</span>
+  <span style="top:32%;left:58%;--r:35deg;--d:1.5s">🥕</span>
+  <span style="top:38%;left:88%;--r:-28deg;--d:1.1s">🥦</span>
+  <span style="top:42%;left:30%;--r:-25deg;--d:.8s">🐟</span>
+  <span style="top:46%;left:72%;--r:12deg;--d:2.1s">🥩</span>
+  <span style="top:52%;left:6%;--r:-10deg;--d:1.8s">🥛</span>
+  <span style="top:55%;left:48%;--r:-12deg;--d:2s">🍞</span>
+  <span style="top:60%;left:84%;--r:20deg;--d:.4s">🥑</span>
+  <span style="top:65%;left:26%;--r:22deg;--d:2.2s">🍓</span>
+  <span style="top:70%;left:62%;--r:-18deg;--d:1.6s">🫐</span>
+  <span style="top:74%;left:8%;--r:25deg;--d:.9s">🌽</span>
+  <span style="top:78%;left:88%;--r:-15deg;--d:.6s">🍗</span>
+  <span style="top:82%;left:40%;--r:18deg;--d:1.3s">🍅</span>
+  <span style="top:86%;left:72%;--r:-22deg;--d:2.5s">🐔</span>
+  <span style="top:90%;left:14%;--r:15deg;--d:1.7s">🍯</span>
+  <span style="top:94%;left:54%;--r:-8deg;--d:.5s">🍆</span>
+  <span class="sparkle" style="top:11%;left:35%;--d:.2s">✨</span>
+  <span class="sparkle" style="top:25%;left:70%;--d:1.2s">💕</span>
+  <span class="sparkle" style="top:40%;left:18%;--d:1.6s">⭐</span>
+  <span class="sparkle" style="top:50%;left:62%;--d:.7s">✨</span>
+  <span class="sparkle" style="top:67%;left:42%;--d:2s">💕</span>
+  <span class="sparkle" style="top:80%;left:22%;--d:1s">✨</span>
+</div>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen" hidden>
+  <div class="login-icon">💪</div>
+  <h1>Evidence bílkovin</h1>
+  <p>Sleduj svůj denní příjem bílkovin</p>
+  <button id="login-btn" class="btn-primary">✨ Přihlásit přes Google</button>
+</div>
+
+<!-- LOADING SCREEN -->
+<div id="loading-screen" class="loader">
+  <div class="spinner"></div>
+</div>
+
+<!-- MAIN APP -->
+<div id="main-screen" hidden>
+  <header>
+    <div class="user-bar">
+      <span id="user-email"></span>
+      <div class="header-actions">
+        <button id="theme-btn" class="header-icon-btn" title="Změnit téma" aria-label="Změnit téma"></button>
+        <button id="mode-btn" class="header-icon-btn" title="Tmavý/světlý režim" aria-label="Přepnout tmavý/světlý"></button>
+        <button id="logout-btn">Odhlásit</button>
+      </div>
+    </div>
+    <div class="view-tabs">
+      <button class="view-tab active" data-view="entries">📋 Záznamy</button>
+      <button class="view-tab" data-view="stats">📊 Statistiky</button>
+    </div>
+    <div class="date-nav" id="date-nav">
+      <button class="nav-btn" id="prev-day" aria-label="Předchozí den">←</button>
+      <div class="date-display">
+        <div class="date-day" id="date-day"></div>
+        <div class="date-full" id="date-full"></div>
+        <button id="today-btn" hidden>Skočit na dnes</button>
+      </div>
+      <button class="nav-btn" id="next-day" aria-label="Další den">→</button>
+    </div>
+  </header>
+
+  <!-- ENTRIES VIEW -->
+  <div id="entries-view">
+    <div class="total-card">
+      <div class="total-label">💪 Celkem za den</div>
+      <div><span class="total-value" id="total-protein">0</span><span class="total-unit"> g</span></div>
+    </div>
+
+    <main>
+      <ul id="entries-list"></ul>
+      <div id="empty-state" class="empty" hidden>
+        <div class="empty-icon">🍽️</div>
+        <div class="empty-title">Zatím prázdno</div>
+        <div class="empty-text">Přidej první jídlo dne ↓</div>
+      </div>
+    </main>
+  </div>
+
+  <!-- STATS VIEW -->
+  <div id="stats-view" hidden>
+    <div class="period-tabs">
+      <button class="period-tab active" data-period="day">Den</button>
+      <button class="period-tab" data-period="week">Týden</button>
+      <button class="period-tab" data-period="month">Měsíc</button>
+    </div>
+
+    <div class="stats-summary">
+      <div class="stat-item">
+        <div class="stat-label">Průměr</div>
+        <div class="stat-value"><span id="stat-avg">0</span><span class="stat-unit"> g</span></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Maximum</div>
+        <div class="stat-value"><span id="stat-max">0</span><span class="stat-unit"> g</span></div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Celkem</div>
+        <div class="stat-value"><span id="stat-total">0</span><span class="stat-unit"> g</span></div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3 class="chart-title" id="chart-title">Posledních 14 dní</h3>
+      <div class="chart" id="chart-container">
+        <div class="chart-empty">Zatím žádná data ke zobrazení</div>
+      </div>
+    </div>
+  </div>
+
+  <button id="add-entry-btn" class="fab">
+    <span class="fab-icon">+</span>
+    <span>Přidat jídlo</span>
+  </button>
+</div>
+
+<!-- ENTRY MODAL -->
+<div id="entry-modal" class="modal-backdrop" hidden>
+  <div class="modal">
+    <h2 id="modal-title">Přidat jídlo</h2>
+    <div class="form-group" id="food-select-group">
+      <label for="food-search">Potravina</label>
+      <div class="autocomplete">
+        <input id="food-search" type="text" placeholder="Začni psát… (např. vejce, kuř, tva)" autocomplete="off">
+        <div id="food-suggestions" class="suggestions" hidden></div>
+      </div>
+    </div>
+    <div class="form-group" id="qty-group" hidden>
+      <label>Množství <span class="qty-unit-label">(<span id="qty-unit">g</span>)</span></label>
+      <div class="qty-control">
+        <button type="button" class="qty-btn" id="qty-minus" aria-label="Méně">−</button>
+        <input id="food-qty" type="number" step="1" min="0" inputmode="numeric">
+        <button type="button" class="qty-btn" id="qty-plus" aria-label="Více">+</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="food-name">Název</label>
+      <input id="food-name" type="text" placeholder="např. Tvaroh">
+    </div>
+    <div class="form-group">
+      <label for="food-protein">Bílkoviny (g)</label>
+      <input id="food-protein" type="number" step="0.1" min="0" inputmode="decimal" placeholder="0">
+    </div>
+    <div class="modal-actions">
+      <button id="cancel-btn" class="btn-secondary">Zrušit</button>
+      <button id="save-btn" class="btn-primary">Uložit</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+// ============================================================
+// REŽIM ÚLOŽIŠTĚ
+//   "local"    = localStorage v prohlížeči, bez přihlášení (pro vývoj/test)
+//   "firebase" = Firebase Auth + Firestore (data v cloudu)
+// ============================================================
+const STORAGE_MODE = "local";
+
+const FIREBASE_CDN = "https://www.gstatic.com/firebasejs/10.13.2";
+
+// ============================================================
+// FIREBASE KONFIGURACE (použije se jen pokud STORAGE_MODE = "firebase")
+// ============================================================
+const firebaseConfig = {
+  apiKey: "TVŮJ_API_KEY",
+  authDomain: "TVŮJ_PROJEKT.firebaseapp.com",
+  projectId: "TVŮJ_PROJEKT",
+  storageBucket: "TVŮJ_PROJEKT.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abcdef"
+};
+
+// ============================================================
+// 2) DATABÁZE POTRAVIN
+//    per = počet jednotek (unit), na který je uvedeno protein
+//    Např. Kuřecí prsa: per=100, unit="g", protein=23 → 23 g bílkovin na 100 g
+//    step = krok pro +/−,  default = startovní množství
+// ============================================================
+const FOOD_DB = [
+  { group: "Vejce", items: [
+    { name: "Vejce",         unit: "ks", per: 1,   protein: 7,  step: 1,  default: 2 },
+    { name: "Vaječný bílek", unit: "ks", per: 1,   protein: 4,  step: 1,  default: 1 },
+  ]},
+  { group: "Maso a ryby", items: [
+    { name: "Kuřecí prsa",        unit: "g",  per: 100, protein: 23, step: 50, default: 100 },
+    { name: "Krůtí prsa",         unit: "g",  per: 100, protein: 24, step: 50, default: 100 },
+    { name: "Vepřová panenka",    unit: "g",  per: 100, protein: 22, step: 50, default: 100 },
+    { name: "Hovězí steak",       unit: "g",  per: 100, protein: 26, step: 50, default: 100 },
+    { name: "Mleté hovězí",       unit: "g",  per: 100, protein: 20, step: 50, default: 100 },
+    { name: "Šunka",              unit: "g",  per: 100, protein: 20, step: 10, default: 50  },
+    { name: "Klobása",            unit: "g",  per: 100, protein: 13, step: 50, default: 100 },
+    { name: "Losos",              unit: "g",  per: 100, protein: 20, step: 50, default: 100 },
+    { name: "Tuňák v konzervě",   unit: "g",  per: 100, protein: 25, step: 10, default: 80  },
+    { name: "Treska",             unit: "g",  per: 100, protein: 18, step: 50, default: 100 },
+    { name: "Sardinky v konzervě",unit: "g",  per: 100, protein: 22, step: 10, default: 100 },
+  ]},
+  { group: "Mléčné výrobky", items: [
+    { name: "Tvaroh polotučný",   unit: "g",  per: 100, protein: 12,  step: 50, default: 250 },
+    { name: "Tvaroh nízkotučný",  unit: "g",  per: 100, protein: 13,  step: 50, default: 250 },
+    { name: "Cottage",            unit: "g",  per: 100, protein: 12,  step: 10, default: 180 },
+    { name: "Skyr",               unit: "g",  per: 100, protein: 11,  step: 10, default: 150 },
+    { name: "Řecký jogurt",       unit: "g",  per: 100, protein: 10,  step: 10, default: 150 },
+    { name: "Bílý jogurt",        unit: "g",  per: 100, protein: 5,   step: 10, default: 150 },
+    { name: "Mléko",              unit: "ml", per: 100, protein: 3.4, step: 50, default: 250 },
+    { name: "Eidam 30%",          unit: "g",  per: 100, protein: 28,  step: 10, default: 30  },
+    { name: "Mozzarella",         unit: "g",  per: 100, protein: 22,  step: 10, default: 100 },
+    { name: "Žervé",              unit: "g",  per: 100, protein: 8,   step: 10, default: 60  },
+  ]},
+  { group: "Rostlinné", items: [
+    { name: "Tofu",            unit: "g", per: 100, protein: 12, step: 50, default: 100 },
+    { name: "Tempeh",          unit: "g", per: 100, protein: 19, step: 50, default: 100 },
+    { name: "Čočka vařená",    unit: "g", per: 100, protein: 9,  step: 50, default: 100 },
+    { name: "Fazole vařené",   unit: "g", per: 100, protein: 8,  step: 50, default: 100 },
+    { name: "Cizrna vařená",   unit: "g", per: 100, protein: 8,  step: 50, default: 100 },
+    { name: "Hummus",          unit: "g", per: 100, protein: 8,  step: 10, default: 50  },
+  ]},
+  { group: "Ořechy a semínka", items: [
+    { name: "Mandle",            unit: "g", per: 100, protein: 20, step: 10, default: 30 },
+    { name: "Vlašské ořechy",    unit: "g", per: 100, protein: 13, step: 10, default: 30 },
+    { name: "Arašídy",           unit: "g", per: 100, protein: 26, step: 10, default: 30 },
+    { name: "Arašídové máslo",   unit: "g", per: 100, protein: 25, step: 10, default: 20 },
+    { name: "Dýňová semínka",    unit: "g", per: 100, protein: 30, step: 10, default: 30 },
+  ]},
+  { group: "Obiloviny", items: [
+    { name: "Ovesné vločky",     unit: "g", per: 100, protein: 13, step: 10, default: 50  },
+    { name: "Chléb celozrnný",   unit: "g", per: 100, protein: 9,  step: 10, default: 50  },
+    { name: "Rýže vařená",       unit: "g", per: 100, protein: 3,  step: 50, default: 100 },
+    { name: "Těstoviny vařené",  unit: "g", per: 100, protein: 5,  step: 50, default: 100 },
+    { name: "Quinoa vařená",     unit: "g", per: 100, protein: 5,  step: 50, default: 100 },
+  ]},
+  { group: "Doplňky", items: [
+    { name: "Whey protein",         unit: "g",  per: 100, protein: 75, step: 10, default: 30 },
+    { name: "Kasein",               unit: "g",  per: 100, protein: 80, step: 10, default: 30 },
+    { name: "Proteinová tyčinka",   unit: "ks", per: 1,   protein: 20, step: 1,  default: 1  },
+  ]},
+];
+
+// ============================================================
+// APP LOGIC
+// ============================================================
+const $ = (id) => document.getElementById(id);
+
+let currentUser = null;
+let currentDate = new Date();
+let currentDate_iso = "";
+let entriesUnsub = null;
+let editingEntryId = null;
+let storage = null;
+
+// ---- Date helpers ----
+function toIso(d) {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+function isToday(d) {
+  return toIso(d) === toIso(new Date());
+}
+function formatDateDay(d) {
+  const weekdays = ["Neděle", "Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek", "Sobota"];
+  const today = new Date();
+  const yesterday = new Date(); yesterday.setDate(today.getDate() - 1);
+  const tomorrow = new Date(); tomorrow.setDate(today.getDate() + 1);
+  if (toIso(d) === toIso(today)) return "Dnes";
+  if (toIso(d) === toIso(yesterday)) return "Včera";
+  if (toIso(d) === toIso(tomorrow)) return "Zítra";
+  return weekdays[d.getDay()];
+}
+function formatDateFull(d) {
+  const months = ["ledna", "února", "března", "dubna", "května", "června",
+                  "července", "srpna", "září", "října", "listopadu", "prosince"];
+  return `${d.getDate()}. ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+// ============================================================
+// STORAGE ADAPTERS
+// ============================================================
+class LocalStorageAdapter {
+  constructor() {
+    this.key = "evidence-bilkovin:data";
+    this.listeners = new Map();
+    this.useMemory = false;
+    this.memoryData = {};
+    // Test, jestli je localStorage dostupný (v data: URL preview např. ne)
+    try {
+      localStorage.setItem("__test__", "1");
+      localStorage.removeItem("__test__");
+    } catch (e) {
+      this.useMemory = true;
+      console.warn("localStorage nedostupný, používám paměť (data se neuloží po refreshi)");
+      setTimeout(() => showToast("⚠️ Náhled bez ukládání — data zmizí po refreshi"), 500);
+    }
+    // Sync mezi záložkami
+    if (!this.useMemory) {
+      window.addEventListener("storage", (e) => {
+        if (e.key === this.key) {
+          for (const date of this.listeners.keys()) this._notify(date);
+        }
+      });
+    }
+  }
+  _load() {
+    if (this.useMemory) return this.memoryData;
+    try { return JSON.parse(localStorage.getItem(this.key) || "{}"); }
+    catch { return {}; }
+  }
+  _save(data) {
+    if (this.useMemory) { this.memoryData = data; return; }
+    try { localStorage.setItem(this.key, JSON.stringify(data)); }
+    catch (e) {
+      this.useMemory = true;
+      this.memoryData = data;
+      showToast("⚠️ Úložiště nedostupné — data jen v paměti");
+    }
+  }
+  _notify(date) {
+    const cbs = this.listeners.get(date) || [];
+    const entries = (this._load()[date] || []).slice()
+      .sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+    cbs.forEach(cb => cb(entries));
+  }
+  subscribe(date, callback) {
+    if (!this.listeners.has(date)) this.listeners.set(date, []);
+    this.listeners.get(date).push(callback);
+    this._notify(date);
+    return () => {
+      const cbs = this.listeners.get(date) || [];
+      const i = cbs.indexOf(callback);
+      if (i >= 0) cbs.splice(i, 1);
+    };
+  }
+  async addEntry(date, entry) {
+    const data = this._load();
+    if (!data[date]) data[date] = [];
+    data[date].push({
+      id: (crypto.randomUUID ? crypto.randomUUID() : Date.now() + "-" + Math.random()),
+      ...entry,
+      createdAt: Date.now()
+    });
+    this._save(data);
+    this._notify(date);
+  }
+  async updateEntry(date, id, updates) {
+    const data = this._load();
+    const list = data[date] || [];
+    const item = list.find(e => e.id === id);
+    if (item) Object.assign(item, updates);
+    this._save(data);
+    this._notify(date);
+  }
+  async deleteEntry(date, id) {
+    const data = this._load();
+    if (data[date]) {
+      data[date] = data[date].filter(e => e.id !== id);
+      this._save(data);
+      this._notify(date);
+    }
+  }
+  async getAllEntries() {
+    const data = this._load();
+    const all = [];
+    for (const [date, entries] of Object.entries(data)) {
+      for (const e of entries) all.push({ ...e, date });
+    }
+    return all;
+  }
+}
+
+class FirestoreAdapter {
+  // Plochá struktura: users/{uid}/entries/{id} s polem date — kvůli statistikám napříč dny
+  constructor(db, uid, fs) {
+    this.db = db;
+    this.uid = uid;
+    this.fs = fs;
+  }
+  _col() {
+    return this.fs.collection(this.db, "users", this.uid, "entries");
+  }
+  subscribe(date, callback) {
+    const q = this.fs.query(
+      this._col(),
+      this.fs.where("date", "==", date),
+      this.fs.orderBy("createdAt", "asc")
+    );
+    return this.fs.onSnapshot(q, (snap) => {
+      const entries = [];
+      snap.forEach(d => entries.push({ id: d.id, ...d.data() }));
+      callback(entries);
+    }, (err) => {
+      console.error(err);
+      showToast("Chyba načítání: " + err.message);
+    });
+  }
+  async addEntry(date, entry) {
+    await this.fs.addDoc(this._col(), { ...entry, date, createdAt: this.fs.serverTimestamp() });
+  }
+  async updateEntry(date, id, updates) {
+    await this.fs.updateDoc(this.fs.doc(this._col(), id), updates);
+  }
+  async deleteEntry(date, id) {
+    await this.fs.deleteDoc(this.fs.doc(this._col(), id));
+  }
+  async getAllEntries() {
+    const snap = await this.fs.getDocs(this._col());
+    const entries = [];
+    snap.forEach(d => entries.push({ id: d.id, ...d.data() }));
+    return entries;
+  }
+}
+
+// ============================================================
+// TÉMA + REŽIM (přepínač v hlavičce)
+// ============================================================
+const THEMES = ["losos", "cappuccino"];
+const THEME_ICONS = { losos: "🍑", cappuccino: "☕" };
+const THEME_NAMES = { losos: "Losos", cappuccino: "Cappuccino" };
+
+function getCurrentTheme() {
+  return document.documentElement.getAttribute("data-theme") || "losos";
+}
+function getCurrentMode() {
+  return document.documentElement.getAttribute("data-mode") || "light";
+}
+
+function applyThemeMode(theme, mode) {
+  document.documentElement.setAttribute("data-theme", theme);
+  document.documentElement.setAttribute("data-mode", mode);
+  try {
+    localStorage.setItem("evidence-bilkovin:theme", theme);
+    localStorage.setItem("evidence-bilkovin:mode", mode);
+  } catch {}
+  refreshThemeButtons();
+}
+
+function refreshThemeButtons() {
+  const theme = getCurrentTheme();
+  const mode = getCurrentMode();
+  const next = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length];
+  $("theme-btn").textContent = THEME_ICONS[theme];
+  $("theme-btn").title = `Téma: ${THEME_NAMES[theme]} → klikni pro ${THEME_NAMES[next]}`;
+  $("mode-btn").textContent = mode === "dark" ? "☀️" : "🌙";
+  $("mode-btn").title = mode === "dark" ? "Přepnout na světlý režim" : "Přepnout na tmavý režim";
+}
+
+$("theme-btn").addEventListener("click", () => {
+  const cur = getCurrentTheme();
+  const next = THEMES[(THEMES.indexOf(cur) + 1) % THEMES.length];
+  applyThemeMode(next, getCurrentMode());
+});
+
+$("mode-btn").addEventListener("click", () => {
+  const cur = getCurrentMode();
+  applyThemeMode(getCurrentTheme(), cur === "dark" ? "light" : "dark");
+});
+
+refreshThemeButtons();
+
+// ============================================================
+// INIT (volba adapteru podle STORAGE_MODE)
+// ============================================================
+if (STORAGE_MODE === "local") {
+  storage = new LocalStorageAdapter();
+  currentUser = { uid: "local" };
+  startApp("Lokální režim (data v prohlížeči)");
+  $("logout-btn").hidden = true;
+} else {
+  const { initializeApp } = await import(`${FIREBASE_CDN}/firebase-app.js`);
+  const auth_mod = await import(`${FIREBASE_CDN}/firebase-auth.js`);
+  const fs = await import(`${FIREBASE_CDN}/firebase-firestore.js`);
+
+  const app = initializeApp(firebaseConfig);
+  const auth = auth_mod.getAuth(app);
+  const db = fs.getFirestore(app);
+  fs.enableIndexedDbPersistence(db).catch(() => {});
+
+  $("login-btn").addEventListener("click", async () => {
+    try {
+      await auth_mod.signInWithPopup(auth, new auth_mod.GoogleAuthProvider());
+    } catch (e) {
+      if (e.code !== "auth/popup-closed-by-user") {
+        alert("Přihlášení selhalo: " + e.message);
+      }
+    }
+  });
+  $("logout-btn").addEventListener("click", () => auth_mod.signOut(auth));
+
+  auth_mod.onAuthStateChanged(auth, (user) => {
+    $("loading-screen").hidden = true;
+    if (user) {
+      currentUser = user;
+      storage = new FirestoreAdapter(db, user.uid, fs);
+      startApp(user.email);
+    } else {
+      currentUser = null;
+      storage = null;
+      if (entriesUnsub) { entriesUnsub(); entriesUnsub = null; }
+      $("main-screen").hidden = true;
+      $("login-screen").hidden = false;
+    }
+  });
+}
+
+function startApp(userLabel) {
+  $("loading-screen").hidden = true;
+  $("login-screen").hidden = true;
+  $("main-screen").hidden = false;
+  $("user-email").textContent = userLabel;
+  renderDate();
+  subscribeEntries();
+}
+
+// ---- Date navigation ----
+$("prev-day").addEventListener("click", () => {
+  currentDate.setDate(currentDate.getDate() - 1);
+  renderDate();
+  subscribeEntries();
+});
+$("next-day").addEventListener("click", () => {
+  currentDate.setDate(currentDate.getDate() + 1);
+  renderDate();
+  subscribeEntries();
+});
+$("today-btn").addEventListener("click", () => {
+  currentDate = new Date();
+  renderDate();
+  subscribeEntries();
+});
+
+function renderDate() {
+  currentDate_iso = toIso(currentDate);
+  $("date-day").textContent = formatDateDay(currentDate);
+  $("date-full").textContent = formatDateFull(currentDate);
+  $("today-btn").hidden = isToday(currentDate);
+}
+
+// ---- Subscribe entries via adapter ----
+function subscribeEntries() {
+  if (entriesUnsub) entriesUnsub();
+  $("entries-list").innerHTML = "";
+  $("total-protein").textContent = "0";
+  $("empty-state").hidden = true;
+  if (!storage) return;
+  entriesUnsub = storage.subscribe(currentDate_iso, renderEntries);
+}
+
+function renderEntries(entries) {
+  const list = $("entries-list");
+  list.innerHTML = "";
+  let total = 0;
+
+  if (entries.length === 0) {
+    $("empty-state").hidden = false;
+  } else {
+    $("empty-state").hidden = true;
+  }
+
+  for (const e of entries) {
+    total += Number(e.protein) || 0;
+    const li = document.createElement("li");
+    li.className = "entry";
+    li.innerHTML = `
+      <div class="entry-info">
+        <div class="entry-name"></div>
+        <div class="entry-protein"></div>
+      </div>
+      <div class="entry-actions">
+        <button class="icon-btn" data-action="edit" aria-label="Upravit">✏️</button>
+        <button class="icon-btn danger" data-action="delete" aria-label="Smazat">🗑️</button>
+      </div>
+    `;
+    li.querySelector(".entry-name").textContent = e.name;
+    li.querySelector(".entry-protein").textContent = `${e.protein} g bílkovin`;
+    li.querySelector('[data-action="edit"]').addEventListener("click", () => openEditModal(e));
+    li.querySelector('[data-action="delete"]').addEventListener("click", () => deleteEntry(e.id));
+    list.appendChild(li);
+  }
+
+  $("total-protein").textContent = Math.round(total * 10) / 10;
+}
+
+// ---- Modal ----
+let currentFood = null;
+
+// Plochý seznam potravin pro našeptávač
+const FLAT_FOODS = [];
+for (const group of FOOD_DB) {
+  for (const item of group.items) {
+    FLAT_FOODS.push({ ...item, group: group.group });
+  }
+}
+
+function normalize(s) {
+  return (s || "").toString().toLowerCase()
+    .normalize("NFD").replace(/[̀-ͯ]/g, "");
+}
+
+function highlightMatch(text, query) {
+  if (!query) return text;
+  const qn = normalize(query);
+  const tn = normalize(text);
+  const idx = tn.indexOf(qn);
+  if (idx === -1) return text;
+  const end = idx + qn.length;
+  return text.substring(0, idx) +
+         '<mark class="match">' + text.substring(idx, end) + '</mark>' +
+         text.substring(end);
+}
+
+let suggestionIndex = -1;
+
+function renderSuggestions(query) {
+  const cont = $("food-suggestions");
+  const qn = normalize(query.trim());
+  const list = qn
+    ? FLAT_FOODS.filter(f => normalize(f.name).includes(qn))
+    : FLAT_FOODS;
+
+  suggestionIndex = -1;
+  cont.innerHTML = "";
+
+  if (list.length === 0 && qn) {
+    const empty = document.createElement("div");
+    empty.className = "suggestion-empty";
+    empty.textContent = "Nic nenalezeno — zvol vlastní zadání ↓";
+    cont.appendChild(empty);
+  } else {
+    for (const food of list) {
+      const div = document.createElement("div");
+      div.className = "suggestion";
+      div.innerHTML = `
+        <div>
+          <div class="suggestion-name">${highlightMatch(food.name, query)}</div>
+          <div class="suggestion-meta">${food.group} · ${food.protein} g / ${food.per} ${food.unit}</div>
+        </div>
+      `;
+      div.addEventListener("mousedown", (e) => {
+        e.preventDefault(); // ať se neztratí focus dřív, než klik proběhne
+        selectFood(food);
+      });
+      cont.appendChild(div);
+    }
+  }
+
+  // "Vlastní zadání" je vždy na konci (sticky)
+  const customDiv = document.createElement("div");
+  customDiv.className = "suggestion suggestion-custom";
+  const customName = query.trim() || "Vlastní zadání";
+  customDiv.innerHTML = `<div class="suggestion-name">✏️ ${customName}</div>`;
+  customDiv.addEventListener("mousedown", (e) => {
+    e.preventDefault();
+    selectCustom(query.trim());
+  });
+  cont.appendChild(customDiv);
+
+  cont.hidden = false;
+}
+
+function selectFood(food) {
+  currentFood = food;
+  $("food-search").value = food.name;
+  $("qty-group").hidden = false;
+  $("qty-unit").textContent = food.unit;
+  $("food-qty").step = food.step;
+  $("food-qty").value = food.default;
+  $("food-name").value = food.name;
+  updateProteinFromQty();
+  $("food-suggestions").hidden = true;
+}
+
+function selectCustom(prefillName) {
+  currentFood = null;
+  $("qty-group").hidden = true;
+  $("food-name").value = prefillName || "";
+  $("food-protein").value = "";
+  $("food-suggestions").hidden = true;
+  setTimeout(() => {
+    if (prefillName) $("food-protein").focus();
+    else $("food-name").focus();
+  }, 30);
+}
+
+function updateProteinFromQty() {
+  if (!currentFood) return;
+  const qty = parseFloat($("food-qty").value) || 0;
+  const protein = (qty / currentFood.per) * currentFood.protein;
+  $("food-protein").value = Math.round(protein * 10) / 10;
+}
+
+function updateSuggestionActive() {
+  const items = $("food-suggestions").querySelectorAll(".suggestion");
+  items.forEach((it, i) => it.classList.toggle("active", i === suggestionIndex));
+  if (suggestionIndex >= 0 && items[suggestionIndex]) {
+    items[suggestionIndex].scrollIntoView({ block: "nearest" });
+  }
+}
+
+$("food-search").addEventListener("focus", () => {
+  renderSuggestions($("food-search").value);
+});
+
+$("food-search").addEventListener("input", () => {
+  // Při psaní pad přiřazený food, dokud uživatel nevybere
+  currentFood = null;
+  $("qty-group").hidden = true;
+  renderSuggestions($("food-search").value);
+});
+
+$("food-search").addEventListener("blur", () => {
+  // Zpoždění, ať se stihne klik na položku zaregistrovat
+  setTimeout(() => { $("food-suggestions").hidden = true; }, 150);
+});
+
+$("food-search").addEventListener("keydown", (e) => {
+  const items = $("food-suggestions").querySelectorAll(".suggestion");
+  const visible = !$("food-suggestions").hidden;
+  if (e.key === "ArrowDown") {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!visible) { renderSuggestions($("food-search").value); return; }
+    suggestionIndex = Math.min(items.length - 1, suggestionIndex + 1);
+    updateSuggestionActive();
+  } else if (e.key === "ArrowUp") {
+    e.preventDefault();
+    e.stopPropagation();
+    suggestionIndex = Math.max(-1, suggestionIndex - 1);
+    updateSuggestionActive();
+  } else if (e.key === "Enter") {
+    if (visible && suggestionIndex >= 0 && items[suggestionIndex]) {
+      e.preventDefault();
+      e.stopPropagation();
+      items[suggestionIndex].dispatchEvent(new MouseEvent("mousedown"));
+    }
+    // jinak Enter propaguje a uloží jídlo
+  } else if (e.key === "Escape") {
+    if (visible) {
+      $("food-suggestions").hidden = true;
+      e.stopPropagation();
+    }
+  }
+});
+
+$("qty-minus").addEventListener("click", () => {
+  if (!currentFood) return;
+  const step = currentFood.step || 1;
+  const cur = parseFloat($("food-qty").value) || 0;
+  $("food-qty").value = Math.max(0, Math.round((cur - step) * 100) / 100);
+  updateProteinFromQty();
+});
+
+$("qty-plus").addEventListener("click", () => {
+  if (!currentFood) return;
+  const step = currentFood.step || 1;
+  const cur = parseFloat($("food-qty").value) || 0;
+  $("food-qty").value = Math.round((cur + step) * 100) / 100;
+  updateProteinFromQty();
+});
+
+$("food-qty").addEventListener("input", updateProteinFromQty);
+
+$("add-entry-btn").addEventListener("click", () => openAddModal());
+$("cancel-btn").addEventListener("click", closeModal);
+$("entry-modal").addEventListener("click", (e) => {
+  if (e.target.id === "entry-modal") closeModal();
+});
+$("save-btn").addEventListener("click", saveEntry);
+
+function openAddModal() {
+  editingEntryId = null;
+  currentFood = null;
+  $("modal-title").textContent = "Přidat jídlo";
+  $("food-select-group").hidden = false;
+  $("food-search").value = "";
+  $("food-suggestions").hidden = true;
+  $("qty-group").hidden = true;
+  $("food-name").value = "";
+  $("food-protein").value = "";
+  $("entry-modal").hidden = false;
+  setTimeout(() => $("food-search").focus(), 50);
+}
+
+function openEditModal(entry) {
+  editingEntryId = entry.id;
+  currentFood = null;
+  $("modal-title").textContent = "Upravit jídlo";
+  $("food-select-group").hidden = true;
+  $("food-suggestions").hidden = true;
+  $("qty-group").hidden = true;
+  $("food-name").value = entry.name;
+  $("food-protein").value = entry.protein;
+  $("entry-modal").hidden = false;
+  setTimeout(() => $("food-protein").focus(), 50);
+}
+
+function closeModal() {
+  $("entry-modal").hidden = true;
+  editingEntryId = null;
+  currentFood = null;
+}
+
+async function saveEntry() {
+  const name = $("food-name").value.trim();
+  const protein = parseFloat($("food-protein").value);
+
+  if (!name) { showToast("Zadej název potraviny"); return; }
+  if (isNaN(protein) || protein < 0) { showToast("Zadej platný počet bílkovin"); return; }
+
+  $("save-btn").disabled = true;
+  try {
+    if (editingEntryId) {
+      await storage.updateEntry(currentDate_iso, editingEntryId, { name, protein });
+    } else {
+      await storage.addEntry(currentDate_iso, { name, protein });
+    }
+    closeModal();
+  } catch (e) {
+    showToast("Chyba uložení: " + e.message);
+  } finally {
+    $("save-btn").disabled = false;
+  }
+}
+
+async function deleteEntry(entryId) {
+  if (!confirm("Opravdu smazat tuto položku?")) return;
+  try {
+    await storage.deleteEntry(currentDate_iso, entryId);
+  } catch (e) {
+    showToast("Chyba mazání: " + e.message);
+  }
+}
+
+// ============================================================
+// VIEW SWITCHING (Záznamy / Statistiky)
+// ============================================================
+let currentView = "entries";
+let currentPeriod = "day";
+
+document.querySelectorAll(".view-tab").forEach(btn => {
+  btn.addEventListener("click", () => setView(btn.dataset.view));
+});
+
+document.querySelectorAll(".period-tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    currentPeriod = btn.dataset.period;
+    document.querySelectorAll(".period-tab").forEach(b => {
+      b.classList.toggle("active", b.dataset.period === currentPeriod);
+    });
+    refreshStats();
+  });
+});
+
+function setView(view) {
+  currentView = view;
+  document.querySelectorAll(".view-tab").forEach(b => {
+    b.classList.toggle("active", b.dataset.view === view);
+  });
+  $("entries-view").hidden = (view !== "entries");
+  $("stats-view").hidden = (view !== "stats");
+  $("date-nav").hidden = (view !== "entries");
+  $("add-entry-btn").hidden = (view !== "entries");
+  if (view === "stats") refreshStats();
+}
+
+// ============================================================
+// STATISTIKY — výpočet a vykreslení grafu
+// ============================================================
+function getWeekStart(d) {
+  const date = new Date(d);
+  date.setHours(0, 0, 0, 0);
+  const day = date.getDay();
+  const diff = day === 0 ? -6 : 1 - day; // pondělí jako start
+  date.setDate(date.getDate() + diff);
+  return date;
+}
+
+function buildBuckets(period, today) {
+  const buckets = [];
+  const months = ["led", "úno", "bře", "dub", "kvě", "čer", "čvc", "srp", "zář", "říj", "lis", "pro"];
+
+  if (period === "day") {
+    for (let i = 13; i >= 0; i--) {
+      const d = new Date(today); d.setDate(d.getDate() - i);
+      buckets.push({
+        key: toIso(d),
+        label: `${d.getDate()}.${d.getMonth() + 1}.`,
+        value: 0,
+        match: (entry) => entry.date === toIso(d),
+      });
+    }
+  } else if (period === "week") {
+    const thisWeek = getWeekStart(today);
+    for (let i = 11; i >= 0; i--) {
+      const start = new Date(thisWeek); start.setDate(start.getDate() - 7 * i);
+      const end = new Date(start); end.setDate(end.getDate() + 6);
+      const startIso = toIso(start), endIso = toIso(end);
+      buckets.push({
+        key: startIso,
+        label: `${start.getDate()}.${start.getMonth() + 1}.`,
+        value: 0,
+        match: (entry) => entry.date >= startIso && entry.date <= endIso,
+      });
+    }
+  } else if (period === "month") {
+    for (let i = 11; i >= 0; i--) {
+      const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+      buckets.push({
+        key,
+        label: months[d.getMonth()],
+        value: 0,
+        match: (entry) => entry.date && entry.date.startsWith(key),
+      });
+    }
+  }
+  return buckets;
+}
+
+async function refreshStats() {
+  if (!storage) return;
+  const entries = await storage.getAllEntries();
+  const today = new Date();
+  const buckets = buildBuckets(currentPeriod, today);
+
+  for (const e of entries) {
+    for (const b of buckets) {
+      if (b.match(e)) {
+        b.value += Number(e.protein) || 0;
+        break;
+      }
+    }
+  }
+
+  // Titulek a vykreslení
+  const titles = {
+    day: "Posledních 14 dní",
+    week: "Posledních 12 týdnů",
+    month: "Posledních 12 měsíců",
+  };
+  $("chart-title").textContent = titles[currentPeriod];
+
+  renderChart(buckets);
+  renderStatsSummary(buckets);
+}
+
+function renderChart(buckets) {
+  const container = $("chart-container");
+  container.innerHTML = "";
+
+  const max = Math.max(1, ...buckets.map(b => b.value));
+  const anyData = buckets.some(b => b.value > 0);
+
+  if (!anyData) {
+    container.innerHTML = '<div class="chart-empty">Zatím žádná data ke zobrazení</div>';
+    return;
+  }
+
+  for (const b of buckets) {
+    const heightPct = (b.value / max) * 100;
+    const rounded = Math.round(b.value * 10) / 10;
+    const bar = document.createElement("div");
+    bar.className = "bar";
+    bar.title = `${b.label}: ${rounded} g`;
+    bar.innerHTML = `
+      <div class="bar-value">${b.value > 0 ? rounded : ""}</div>
+      <div class="bar-fill ${b.value === 0 ? "zero" : ""}" style="--h: ${heightPct}%"></div>
+      <div class="bar-label">${b.label}</div>
+    `;
+    container.appendChild(bar);
+  }
+}
+
+function renderStatsSummary(buckets) {
+  const nonZero = buckets.filter(b => b.value > 0);
+  const avg = nonZero.length
+    ? nonZero.reduce((s, b) => s + b.value, 0) / nonZero.length
+    : 0;
+  const maxVal = Math.max(0, ...buckets.map(b => b.value));
+  const total = buckets.reduce((s, b) => s + b.value, 0);
+
+  const round = (n) => Math.round(n * 10) / 10;
+  $("stat-avg").textContent = round(avg);
+  $("stat-max").textContent = round(maxVal);
+  $("stat-total").textContent = round(total);
+}
+
+// ---- Toast ----
+let toastTimeout = null;
+function showToast(msg) {
+  const existing = document.querySelector(".toast");
+  if (existing) existing.remove();
+  if (toastTimeout) clearTimeout(toastTimeout);
+  const t = document.createElement("div");
+  t.className = "toast";
+  t.textContent = msg;
+  document.body.appendChild(t);
+  toastTimeout = setTimeout(() => t.remove(), 3000);
+}
+
+// ---- Keyboard shortcuts ----
+document.addEventListener("keydown", (e) => {
+  if ($("entry-modal").hidden === false) {
+    if (e.key === "Escape") closeModal();
+    if (e.key === "Enter" && e.target.tagName !== "SELECT") saveEntry();
+    return;
+  }
+  if (currentUser && currentView === "entries") {
+    if (e.key === "ArrowLeft") $("prev-day").click();
+    if (e.key === "ArrowRight") $("next-day").click();
+  }
+});
+</script>
+</body>
+</html>
