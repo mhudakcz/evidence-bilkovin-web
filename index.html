@@ -1479,50 +1479,54 @@ class FirestoreAdapter {
     });
   }
 
+  // Používáme writeBatch (ne runTransaction) — batch je taky atomický,
+  // ale podporuje offline cache a optimistic local update → záznam se
+  // v UI objeví okamžitě, ne až po round-tripu na server.
   async addEntry(date, entry) {
     const userRef = this._userRef();
     const entryRef = this.fs.doc(this._col());
     const protein = Number(entry.protein) || 0;
-    await this.fs.runTransaction(this.db, async (tx) => {
-      tx.set(entryRef, { ...entry, date, createdAt: this.fs.serverTimestamp() });
-      tx.set(userRef, {
-        entryCount: this.fs.increment(1),
-        totalProtein: this.fs.increment(protein),
-        lastSeen: this.fs.serverTimestamp(),
-      }, { merge: true });
-    });
+    const batch = this.fs.writeBatch(this.db);
+    batch.set(entryRef, { ...entry, date, createdAt: this.fs.serverTimestamp() });
+    batch.set(userRef, {
+      entryCount: this.fs.increment(1),
+      totalProtein: this.fs.increment(protein),
+      lastSeen: this.fs.serverTimestamp(),
+    }, { merge: true });
+    await batch.commit();
   }
 
   async updateEntry(date, id, updates) {
     const entryRef = this.fs.doc(this._col(), id);
     const userRef = this._userRef();
-    await this.fs.runTransaction(this.db, async (tx) => {
-      const snap = await tx.get(entryRef);
-      if (!snap.exists()) return;
-      const oldProtein = Number(snap.data().protein) || 0;
-      const newProtein = updates.protein !== undefined ? Number(updates.protein) : oldProtein;
-      const delta = newProtein - oldProtein;
-      tx.update(entryRef, updates);
-      const profileUpdate = { lastSeen: this.fs.serverTimestamp() };
-      if (delta !== 0) profileUpdate.totalProtein = this.fs.increment(delta);
-      tx.set(userRef, profileUpdate, { merge: true });
-    });
+    // Pro výpočet delty potřebujeme starou hodnotu proteinu
+    const snap = await this.fs.getDoc(entryRef);
+    if (!snap.exists()) return;
+    const oldProtein = Number(snap.data().protein) || 0;
+    const newProtein = updates.protein !== undefined ? Number(updates.protein) : oldProtein;
+    const delta = newProtein - oldProtein;
+    const batch = this.fs.writeBatch(this.db);
+    batch.update(entryRef, updates);
+    const profileUpdate = { lastSeen: this.fs.serverTimestamp() };
+    if (delta !== 0) profileUpdate.totalProtein = this.fs.increment(delta);
+    batch.set(userRef, profileUpdate, { merge: true });
+    await batch.commit();
   }
 
   async deleteEntry(date, id) {
     const entryRef = this.fs.doc(this._col(), id);
     const userRef = this._userRef();
-    await this.fs.runTransaction(this.db, async (tx) => {
-      const snap = await tx.get(entryRef);
-      if (!snap.exists()) return;
-      const protein = Number(snap.data().protein) || 0;
-      tx.delete(entryRef);
-      tx.set(userRef, {
-        entryCount: this.fs.increment(-1),
-        totalProtein: this.fs.increment(-protein),
-        lastSeen: this.fs.serverTimestamp(),
-      }, { merge: true });
-    });
+    const snap = await this.fs.getDoc(entryRef);
+    if (!snap.exists()) return;
+    const protein = Number(snap.data().protein) || 0;
+    const batch = this.fs.writeBatch(this.db);
+    batch.delete(entryRef);
+    batch.set(userRef, {
+      entryCount: this.fs.increment(-1),
+      totalProtein: this.fs.increment(-protein),
+      lastSeen: this.fs.serverTimestamp(),
+    }, { merge: true });
+    await batch.commit();
   }
 
   async getAllEntries() {
