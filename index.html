@@ -21,99 +21,139 @@
 </script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  /* ============ TÉMA: Losos · Light (default) ============ */
-  :root, [data-theme="losos"][data-mode="light"] {
+  /* ============================================================
+     TÉMA: definuje barvy primary (per téma)
+     REŽIM: definuje surface/text/bg/body-bg (společné per mode)
+     Pořadí v souboru: TÉMATA → LIGHT → DARK (dark přepíše --primary-light)
+     ============================================================ */
+
+  /* Globální (mimo téma) */
+  :root {
+    --danger: #ef4444;
+    --success: #22c55e;
+  }
+
+  /* === TÉMA: Losos (default) === */
+  :root, [data-theme="losos"] {
     --primary: #f88379;
     --primary-dark: #e56b6f;
     --primary-light: #ffd6d2;
     --primary-rgb: 248, 131, 121;
-    --accent: #fdba74;
-    --surface: #ffffff;
-    --surface-tint: #fff3f1;
-    --bg: #ffe1de;
-    --border: #ffd6d2;
-    --text: #4a2630;
-    --text-muted: #a07682;
-    --danger: #ef4444;
-    --success: #22c55e;
-    --body-bg:
-      radial-gradient(circle at 20% 10%, #ffd6d2 0%, transparent 45%),
-      radial-gradient(circle at 80% 30%, #ffe1de 0%, transparent 50%),
-      radial-gradient(circle at 50% 80%, #ffdde0 0%, transparent 55%),
-      linear-gradient(135deg, #fff3f1 0%, #ffe1de 50%, #ffece8 100%);
     --total-gradient: linear-gradient(135deg, #ffb3a8 0%, #f88379 55%, #e56b6f 100%);
     --bar-light: #ffc8c2;
-    --emoji-opacity: 0.13;
-    --sparkle-opacity: 0.4;
   }
 
-  /* ============ TÉMA: Losos · Dark ============ */
-  [data-theme="losos"][data-mode="dark"] {
-    --primary: #f88379;
-    --primary-dark: #c2554f;
-    --primary-light: #5c2a30;
-    --primary-rgb: 248, 131, 121;
-    --surface: #2a1d20;
-    --surface-tint: #221619;
-    --bg: #3a262b;
-    --border: #4a3036;
-    --text: #fce8e3;
-    --text-muted: #c8a8a8;
-    --body-bg:
-      radial-gradient(circle at 20% 10%, #3a1f26 0%, transparent 45%),
-      radial-gradient(circle at 80% 30%, #2a161c 0%, transparent 50%),
-      radial-gradient(circle at 50% 80%, #321a22 0%, transparent 55%),
-      linear-gradient(135deg, #1d1216 0%, #261519 50%, #1f1317 100%);
-    --total-gradient: linear-gradient(135deg, #ffb3a8 0%, #f88379 55%, #c2554f 100%);
-    --bar-light: #ffc8c2;
-    --emoji-opacity: 0.08;
-    --sparkle-opacity: 0.35;
+  /* === TÉMA: Cappuccino (decentní mocha) === */
+  [data-theme="cappuccino"] {
+    --primary: #cdab89;
+    --primary-dark: #a78e6b;
+    --primary-light: #f5e7d0;
+    --primary-rgb: 205, 171, 137;
+    --total-gradient: linear-gradient(135deg, #e6cfb1 0%, #cdab89 55%, #a78e6b 100%);
+    --bar-light: #ebd8b8;
   }
 
-  /* ============ TÉMA: Cappuccino · Light ============ */
-  [data-theme="cappuccino"][data-mode="light"] {
-    --primary: #c19a6b;
-    --primary-dark: #8b6f47;
-    --primary-light: #f0e1cc;
-    --primary-rgb: 193, 154, 107;
-    --accent: #d4a574;
+  /* === TÉMA: Růže (pink/magenta) === */
+  [data-theme="ruze"] {
+    --primary: #ec4899;
+    --primary-dark: #be185d;
+    --primary-light: #fce7f3;
+    --primary-rgb: 236, 72, 153;
+    --total-gradient: linear-gradient(135deg, #f9a8d4 0%, #ec4899 55%, #be185d 100%);
+    --bar-light: #fbcfe8;
+  }
+
+  /* === TÉMA: Mátová (zelená/mint) === */
+  [data-theme="matova"] {
+    --primary: #10b981;
+    --primary-dark: #047857;
+    --primary-light: #d1fae5;
+    --primary-rgb: 16, 185, 129;
+    --total-gradient: linear-gradient(135deg, #6ee7b7 0%, #10b981 55%, #047857 100%);
+    --bar-light: #a7f3d0;
+  }
+
+  /* === TÉMA: Oceán (modrá) === */
+  [data-theme="ocean"] {
+    --primary: #0ea5e9;
+    --primary-dark: #0369a1;
+    --primary-light: #dbeafe;
+    --primary-rgb: 14, 165, 233;
+    --total-gradient: linear-gradient(135deg, #7dd3fc 0%, #0ea5e9 55%, #0369a1 100%);
+    --bar-light: #bae6fd;
+  }
+
+  /* === TÉMA: Slunce (žlutá/amber) === */
+  [data-theme="slunce"] {
+    --primary: #f59e0b;
+    --primary-dark: #b45309;
+    --primary-light: #fef3c7;
+    --primary-rgb: 245, 158, 11;
+    --total-gradient: linear-gradient(135deg, #fcd34d 0%, #f59e0b 55%, #b45309 100%);
+    --bar-light: #fde68a;
+  }
+
+  /* === TÉMA: Levandule (fialová) === */
+  [data-theme="levandule"] {
+    --primary: #a855f7;
+    --primary-dark: #7e22ce;
+    --primary-light: #f3e8ff;
+    --primary-rgb: 168, 85, 247;
+    --total-gradient: linear-gradient(135deg, #d8b4fe 0%, #a855f7 55%, #7e22ce 100%);
+    --bar-light: #e9d5ff;
+  }
+
+  /* === TÉMA: Třešeň (červená) === */
+  [data-theme="tresen"] {
+    --primary: #dc2626;
+    --primary-dark: #991b1b;
+    --primary-light: #fee2e2;
+    --primary-rgb: 220, 38, 38;
+    --total-gradient: linear-gradient(135deg, #fca5a5 0%, #dc2626 55%, #991b1b 100%);
+    --bar-light: #fecaca;
+  }
+
+  /* === TÉMA: Cyan (tyrkysová) === */
+  [data-theme="cyan"] {
+    --primary: #06b6d4;
+    --primary-dark: #0e7490;
+    --primary-light: #cffafe;
+    --primary-rgb: 6, 182, 212;
+    --total-gradient: linear-gradient(135deg, #67e8f9 0%, #06b6d4 55%, #0e7490 100%);
+    --bar-light: #a5f3fc;
+  }
+
+  /* === REŽIM: Light (společné pro všechna témata) === */
+  [data-mode="light"] {
     --surface: #ffffff;
-    --surface-tint: #fdf6ec;
-    --bg: #f5e6cd;
-    --border: #e8d4b8;
-    --text: #3a2618;
-    --text-muted: #8a7060;
+    --surface-tint: rgba(var(--primary-rgb), 0.04);
+    --bg: rgba(var(--primary-rgb), 0.12);
+    --border: rgba(var(--primary-rgb), 0.22);
+    --text: #1c1917;
+    --text-muted: #78716c;
     --body-bg:
-      radial-gradient(circle at 20% 10%, #f0e1cc 0%, transparent 45%),
-      radial-gradient(circle at 80% 30%, #f5e6cd 0%, transparent 50%),
-      radial-gradient(circle at 50% 80%, #ede0c5 0%, transparent 55%),
-      linear-gradient(135deg, #faf2e3 0%, #f5e6cd 50%, #faebda 100%);
-    --total-gradient: linear-gradient(135deg, #d4a574 0%, #c19a6b 55%, #8b6f47 100%);
-    --bar-light: #e8c89a;
+      radial-gradient(circle at 20% 10%, rgba(var(--primary-rgb), 0.18) 0%, transparent 45%),
+      radial-gradient(circle at 80% 30%, rgba(var(--primary-rgb), 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 50% 80%, rgba(var(--primary-rgb), 0.14) 0%, transparent 55%),
+      linear-gradient(135deg, rgba(var(--primary-rgb), 0.03) 0%, rgba(var(--primary-rgb), 0.07) 50%, rgba(var(--primary-rgb), 0.04) 100%);
     --emoji-opacity: 0.13;
     --sparkle-opacity: 0.4;
   }
 
-  /* ============ TÉMA: Cappuccino · Dark ============ */
-  [data-theme="cappuccino"][data-mode="dark"] {
-    --primary: #d4a574;
-    --primary-dark: #8b6f47;
-    --primary-light: #4a3528;
-    --primary-rgb: 212, 165, 116;
-    --accent: #e8c089;
-    --surface: #2d2018;
-    --surface-tint: #221710;
-    --bg: #3a2a20;
-    --border: #4a3a2e;
-    --text: #f0e1cc;
-    --text-muted: #b8a08a;
+  /* === REŽIM: Dark (společné pro všechna témata) === */
+  [data-mode="dark"] {
+    --surface: #1f1c1e;
+    --surface-tint: #161416;
+    --bg: rgba(var(--primary-rgb), 0.10);
+    --border: rgba(var(--primary-rgb), 0.22);
+    --text: #f5ecdf;
+    --text-muted: #a8a09e;
+    --primary-light: rgba(var(--primary-rgb), 0.18);
     --body-bg:
-      radial-gradient(circle at 20% 10%, #2e1f15 0%, transparent 45%),
-      radial-gradient(circle at 80% 30%, #261810 0%, transparent 50%),
-      radial-gradient(circle at 50% 80%, #2a1d12 0%, transparent 55%),
-      linear-gradient(135deg, #1d130c 0%, #251a12 50%, #1f140d 100%);
-    --total-gradient: linear-gradient(135deg, #e8c089 0%, #d4a574 55%, #8b6f47 100%);
-    --bar-light: #f0e1cc;
+      radial-gradient(circle at 20% 10%, rgba(var(--primary-rgb), 0.14) 0%, transparent 45%),
+      radial-gradient(circle at 80% 30%, rgba(var(--primary-rgb), 0.07) 0%, transparent 50%),
+      radial-gradient(circle at 50% 80%, rgba(var(--primary-rgb), 0.09) 0%, transparent 55%),
+      linear-gradient(135deg, #15131a 0%, #1a151c 50%, #16131a 100%);
     --emoji-opacity: 0.08;
     --sparkle-opacity: 0.35;
   }
@@ -268,6 +308,77 @@
   }
   .header-icon-btn:active {
     transform: scale(0.95);
+  }
+
+  /* Theme popover */
+  .theme-popover {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 8px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.18);
+    z-index: 50;
+    min-width: 210px;
+    max-height: 70vh;
+    overflow-y: auto;
+    animation: popoverIn 0.15s ease-out;
+  }
+  @keyframes popoverIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .theme-popover-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    padding: 6px 10px 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+  .theme-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 10px;
+    border-radius: 9px;
+    background: none;
+    text-align: left;
+    font-size: 0.92rem;
+    color: var(--text);
+    border: none;
+    cursor: pointer;
+    transition: background 0.1s;
+    font-family: inherit;
+  }
+  .theme-option:hover {
+    background: rgba(var(--primary-rgb), 0.10);
+  }
+  .theme-option.active {
+    background: rgba(var(--primary-rgb), 0.14);
+    font-weight: 600;
+  }
+  .theme-option.active::after {
+    content: "✓";
+    margin-left: auto;
+    color: var(--primary);
+    font-weight: 700;
+  }
+  .theme-swatch {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.08);
+    flex-shrink: 0;
+  }
+  .theme-emoji {
+    font-size: 1.05rem;
+  }
+  .theme-name {
+    flex: 1;
   }
   .date-nav {
     display: flex;
@@ -827,11 +938,12 @@
     <div class="user-bar">
       <span id="user-email"></span>
       <div class="header-actions">
-        <button id="theme-btn" class="header-icon-btn" title="Změnit téma" aria-label="Změnit téma"></button>
+        <button id="theme-btn" class="header-icon-btn" title="Vybrat téma" aria-label="Vybrat téma"></button>
         <button id="mode-btn" class="header-icon-btn" title="Tmavý/světlý režim" aria-label="Přepnout tmavý/světlý"></button>
         <button id="logout-btn">Odhlásit</button>
       </div>
     </div>
+    <div id="theme-popover" class="theme-popover" hidden></div>
     <div class="view-tabs">
       <button class="view-tab active" data-view="entries">📋 Záznamy</button>
       <button class="view-tab" data-view="stats">📊 Statistiky</button>
@@ -941,7 +1053,7 @@
 //   "local"    = localStorage v prohlížeči, bez přihlášení (pro vývoj/test)
 //   "firebase" = Firebase Auth + Firestore (data v cloudu)
 // ============================================================
-const STORAGE_MODE = "local";
+const STORAGE_MODE = "firebase";
 
 const FIREBASE_CDN = "https://www.gstatic.com/firebasejs/10.13.2";
 
@@ -949,12 +1061,12 @@ const FIREBASE_CDN = "https://www.gstatic.com/firebasejs/10.13.2";
 // FIREBASE KONFIGURACE (použije se jen pokud STORAGE_MODE = "firebase")
 // ============================================================
 const firebaseConfig = {
-  apiKey: "TVŮJ_API_KEY",
-  authDomain: "TVŮJ_PROJEKT.firebaseapp.com",
-  projectId: "TVŮJ_PROJEKT",
-  storageBucket: "TVŮJ_PROJEKT.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef"
+  apiKey: "AIzaSyBAoMo_lufk_xeG5Jhj8lPeDCyH8xUMKlA",
+  authDomain: "evidence-bilkovin.firebaseapp.com",
+  projectId: "evidence-bilkovin",
+  storageBucket: "evidence-bilkovin.firebasestorage.app",
+  messagingSenderId: "70946733968",
+  appId: "1:70946733968:web:0b7989cbc647850abbfd15"
 };
 
 // ============================================================
@@ -1197,11 +1309,19 @@ class FirestoreAdapter {
 }
 
 // ============================================================
-// TÉMA + REŽIM (přepínač v hlavičce)
+// TÉMA + REŽIM (popover v hlavičce)
 // ============================================================
-const THEMES = ["losos", "cappuccino"];
-const THEME_ICONS = { losos: "🍑", cappuccino: "☕" };
-const THEME_NAMES = { losos: "Losos", cappuccino: "Cappuccino" };
+const THEMES = [
+  { id: "losos",      name: "Losos",      emoji: "🍑", color: "#f88379" },
+  { id: "cappuccino", name: "Cappuccino", emoji: "☕", color: "#cdab89" },
+  { id: "ruze",       name: "Růže",       emoji: "🌹", color: "#ec4899" },
+  { id: "matova",     name: "Mátová",     emoji: "🌿", color: "#10b981" },
+  { id: "ocean",      name: "Oceán",      emoji: "🌊", color: "#0ea5e9" },
+  { id: "cyan",       name: "Cyan",       emoji: "💎", color: "#06b6d4" },
+  { id: "slunce",     name: "Slunce",     emoji: "☀️", color: "#f59e0b" },
+  { id: "levandule",  name: "Levandule",  emoji: "💜", color: "#a855f7" },
+  { id: "tresen",     name: "Třešeň",     emoji: "🍒", color: "#dc2626" },
+];
 
 function getCurrentTheme() {
   return document.documentElement.getAttribute("data-theme") || "losos";
@@ -1218,22 +1338,61 @@ function applyThemeMode(theme, mode) {
     localStorage.setItem("evidence-bilkovin:mode", mode);
   } catch {}
   refreshThemeButtons();
+  refreshThemeOptionsActive();
 }
 
 function refreshThemeButtons() {
   const theme = getCurrentTheme();
   const mode = getCurrentMode();
-  const next = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length];
-  $("theme-btn").textContent = THEME_ICONS[theme];
-  $("theme-btn").title = `Téma: ${THEME_NAMES[theme]} → klikni pro ${THEME_NAMES[next]}`;
+  const meta = THEMES.find(t => t.id === theme) || THEMES[0];
+  $("theme-btn").textContent = meta.emoji;
+  $("theme-btn").title = `Téma: ${meta.name}`;
   $("mode-btn").textContent = mode === "dark" ? "☀️" : "🌙";
   $("mode-btn").title = mode === "dark" ? "Přepnout na světlý režim" : "Přepnout na tmavý režim";
 }
 
-$("theme-btn").addEventListener("click", () => {
+function buildThemePopover() {
+  const pop = $("theme-popover");
+  pop.innerHTML = '<div class="theme-popover-title">Vyber téma</div>';
+  for (const t of THEMES) {
+    const btn = document.createElement("button");
+    btn.className = "theme-option";
+    btn.dataset.theme = t.id;
+    btn.innerHTML = `
+      <span class="theme-swatch" style="background: ${t.color}"></span>
+      <span class="theme-emoji">${t.emoji}</span>
+      <span class="theme-name">${t.name}</span>
+    `;
+    btn.addEventListener("click", () => {
+      applyThemeMode(t.id, getCurrentMode());
+      $("theme-popover").hidden = true;
+    });
+    pop.appendChild(btn);
+  }
+}
+
+function refreshThemeOptionsActive() {
   const cur = getCurrentTheme();
-  const next = THEMES[(THEMES.indexOf(cur) + 1) % THEMES.length];
-  applyThemeMode(next, getCurrentMode());
+  document.querySelectorAll(".theme-option").forEach(el => {
+    el.classList.toggle("active", el.dataset.theme === cur);
+  });
+}
+
+buildThemePopover();
+
+$("theme-btn").addEventListener("click", (e) => {
+  e.stopPropagation();
+  const pop = $("theme-popover");
+  pop.hidden = !pop.hidden;
+  if (!pop.hidden) refreshThemeOptionsActive();
+});
+
+document.addEventListener("click", (e) => {
+  const pop = $("theme-popover");
+  if (pop.hidden) return;
+  if (!pop.contains(e.target) && e.target !== $("theme-btn")) {
+    pop.hidden = true;
+  }
 });
 
 $("mode-btn").addEventListener("click", () => {
