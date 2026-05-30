@@ -850,6 +850,31 @@
     margin-bottom: 6px;
     font-weight: 500;
   }
+  .food-picker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .food-picker-header label {
+    margin-bottom: 0;
+  }
+  .link-btn {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background 0.1s;
+  }
+  .link-btn:hover {
+    background: var(--primary-light);
+  }
+  .link-btn:active {
+    transform: scale(0.97);
+  }
   .qty-unit-label {
     font-size: 0.75rem;
     color: var(--text-muted);
@@ -1160,8 +1185,14 @@
   <div class="modal">
     <h2 id="modal-title">Přidat jídlo</h2>
     <div class="form-group" id="food-select-group">
-      <label for="food-search">Potravina</label>
-      <div class="autocomplete">
+      <div class="food-picker-header">
+        <label for="food-select">Potravina</label>
+        <button type="button" id="food-mode-toggle" class="link-btn">🔍 Hledat psaním</button>
+      </div>
+      <!-- Mód: dropdown (default) -->
+      <select id="food-select"></select>
+      <!-- Mód: vyhledávání (skryté) -->
+      <div class="autocomplete" id="food-search-wrap" hidden>
         <input id="food-search" type="text" placeholder="Začni psát… (např. vejce, kuř, tva)" autocomplete="off">
         <div id="food-suggestions" class="suggestions" hidden></div>
       </div>
@@ -1406,6 +1437,11 @@ class LocalStorageAdapter {
     }
     return all;
   }
+  async refresh(date) {
+    const data = this._load();
+    return (data[date] || []).slice()
+      .sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0));
+  }
   // Stuby — v lokálním režimu nemá admin smysl
   async initProfile(_authUser) {}
   async checkIsAdmin() { return false; }
@@ -1487,13 +1523,30 @@ class FirestoreAdapter {
     const entryRef = this.fs.doc(this._col());
     const protein = Number(entry.protein) || 0;
     const batch = this.fs.writeBatch(this.db);
-    batch.set(entryRef, { ...entry, date, createdAt: this.fs.serverTimestamp() });
+    // Timestamp.now() (klient) místo serverTimestamp() — kvůli orderBy
+    // by se doc s pending serverTimestampem mohl v lokální cache na
+    // mobilu schovat až do potvrzení ze serveru.
+    batch.set(entryRef, { ...entry, date, createdAt: this.fs.Timestamp.now() });
     batch.set(userRef, {
       entryCount: this.fs.increment(1),
       totalProtein: this.fs.increment(protein),
       lastSeen: this.fs.serverTimestamp(),
     }, { merge: true });
     await batch.commit();
+  }
+
+  // Defenzivně — po save zavoláme refresh, aby UI dostalo data
+  // i kdyby snapshot listener z nějakého důvodu nefire-oval.
+  async refresh(date) {
+    const q = this.fs.query(
+      this._col(),
+      this.fs.where("date", "==", date),
+      this.fs.orderBy("createdAt", "asc")
+    );
+    const snap = await this.fs.getDocs(q);
+    const entries = [];
+    snap.forEach(d => entries.push({ id: d.id, ...d.data() }));
+    return entries;
   }
 
   async updateEntry(date, id, updates) {
@@ -1878,6 +1931,74 @@ function updateSuggestionActive() {
   }
 }
 
+// ============================================================
+// PICKER MÓDY: select (default) vs search
+// ============================================================
+function populateFoodSelect() {
+  const sel = $("food-select");
+  sel.innerHTML = `
+    <option value="">— Vyber potravinu —</option>
+    <option value="__custom__">✏️ Vlastní zadání</option>
+  `;
+  FOOD_DB.forEach((group, gi) => {
+    const og = document.createElement("optgroup");
+    og.label = group.group;
+    group.items.forEach((item, ii) => {
+      const opt = document.createElement("option");
+      opt.value = `${gi}::${ii}`;
+      opt.textContent = item.name;
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  });
+}
+populateFoodSelect();
+
+function findFoodFromSelectValue(value) {
+  if (!value || value === "__custom__") return null;
+  const [gi, ii] = value.split("::").map(Number);
+  return FOOD_DB[gi]?.items[ii] || null;
+}
+
+$("food-select").addEventListener("change", (e) => {
+  const v = e.target.value;
+  if (v === "__custom__") {
+    selectCustom("");
+    return;
+  }
+  if (!v) {
+    currentFood = null;
+    $("qty-group").hidden = true;
+    return;
+  }
+  const food = findFoodFromSelectValue(v);
+  if (food) selectFood(food);
+});
+
+// Přepínač módu (select ↔ search)
+function getFoodPickerMode() {
+  try { return localStorage.getItem("evidence-bilkovin:pickerMode") || "select"; }
+  catch { return "select"; }
+}
+function setFoodPickerMode(mode) {
+  try { localStorage.setItem("evidence-bilkovin:pickerMode", mode); } catch {}
+  applyFoodPickerMode(mode);
+}
+function applyFoodPickerMode(mode) {
+  const isSearch = (mode === "search");
+  $("food-select").hidden = isSearch;
+  $("food-search-wrap").hidden = !isSearch;
+  $("food-mode-toggle").textContent = isSearch ? "📋 Seznam" : "🔍 Hledat psaním";
+}
+
+$("food-mode-toggle").addEventListener("click", () => {
+  const next = getFoodPickerMode() === "search" ? "select" : "search";
+  setFoodPickerMode(next);
+  if (next === "search") setTimeout(() => $("food-search").focus(), 50);
+});
+
+applyFoodPickerMode(getFoodPickerMode());
+
 $("food-search").addEventListener("focus", () => {
   renderSuggestions($("food-search").value);
 });
@@ -1953,13 +2074,22 @@ function openAddModal() {
   currentFood = null;
   $("modal-title").textContent = "Přidat jídlo";
   $("food-select-group").hidden = false;
+  $("food-select").value = "";
   $("food-search").value = "";
   $("food-suggestions").hidden = true;
   $("qty-group").hidden = true;
   $("food-name").value = "";
   $("food-protein").value = "";
   $("entry-modal").hidden = false;
-  setTimeout(() => $("food-search").focus(), 50);
+  applyFoodPickerMode(getFoodPickerMode());
+  // Na mobilu otevíraní native selectu obtěžuje, focus jen na desktopu
+  if (window.matchMedia("(min-width: 600px)").matches) {
+    setTimeout(() => {
+      const mode = getFoodPickerMode();
+      if (mode === "search") $("food-search").focus();
+      else $("food-select").focus();
+    }, 50);
+  }
 }
 
 function openEditModal(entry) {
@@ -1996,6 +2126,7 @@ async function saveEntry() {
       await storage.addEntry(currentDate_iso, { name, protein });
     }
     closeModal();
+    await refreshEntriesNow();
   } catch (e) {
     showToast("Chyba uložení: " + e.message);
   } finally {
@@ -2007,8 +2138,21 @@ async function deleteEntry(entryId) {
   if (!confirm("Opravdu smazat tuto položku?")) return;
   try {
     await storage.deleteEntry(currentDate_iso, entryId);
+    await refreshEntriesNow();
   } catch (e) {
     showToast("Chyba mazání: " + e.message);
+  }
+}
+
+// Manuální refresh — pojistka pro případ, že snapshot listener nefire-uje
+// (potkali jsme to na mobilu s pending serverTimestamp + orderBy).
+async function refreshEntriesNow() {
+  if (!storage || !storage.refresh) return;
+  try {
+    const entries = await storage.refresh(currentDate_iso);
+    renderEntries(entries);
+  } catch (e) {
+    console.warn("refreshEntriesNow failed:", e);
   }
 }
 
